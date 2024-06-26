@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #rectangle{
+            border: 1px solid rgb(255, 0, 0);
+            width: 400px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-self: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <div id="rectangle"></div>
+    <script>
+        let rect=document.querySelector("#rectangle"); //catch or get that section which we want with .queryselector and stored in variable
+        rect.addEventListener("mousemove",function(details){ // want to run a function on that variable (can also say run a event on that variable ) so variablename.addeventlister and inside that the function
+             var rectanglelocation = rect.getBoundingClientRect(); // shows the position of mouse in the document inside the section rect
+             var insiderectval=details.clientX - rectanglelocation.left;// made a variable in which we are getting value of mouse in rectangle in x axis and subtracting it from the value which is outside the rect
+             if(insiderectval<rectanglelocation.width/2){//if the value is less than rectangle's half width then is is of left
+              var redcolor = gsap.utils.mapRange(0, rectanglelocation.width/2, 255, 0, insiderectval)   // (mininput,maxinput,minoutput,maxoutput,where is actually your mouse is(basically the vaule that will be mapped ))
+              gsap.to(rect,{     //gsap to change somthing of rect 
+                backgroundColor:`rgb(${redcolor},0,0)`,  // what we want to change ? color 
+                ease:Power4,           //smooth change
+              })
+            } else if(insiderectval>rectanglelocation.width/2){
+                var bluecolor = gsap.utils.mapRange(250, rectanglelocation.width,0, 255, insiderectval)   // (mininput,maxinput,minoutput,maxoutput,where is actually your mouse is(basically the vaule that will be mapped ))
+              gsap.to(rect,{     //gsap to change somthing of rect 
+                backgroundColor:`rgb(0,0,${bluecolor})`,  // what we want to change ? color 
+                ease:Power4,           //smooth change
+              })
+             }
+        })
+        
+        rect.addEventListener("mouseleave",function(){
+            gsap.to(rect,{
+                backgroundColor:"white",
+            })
+        })
+    </script>
+</body>
+</html>
